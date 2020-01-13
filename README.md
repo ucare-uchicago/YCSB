@@ -26,7 +26,9 @@ This should affect all bindings. I have added a new value generator, the idea is
 
 valuefieldpattern=--some pattern--
   
-and this property goes in the workload configuration file. So now, when inserting some key-value pair, the value will be generated using the chars in this pattern. For example, if fieldsize = 10 and pattern = abcd then the row will look like <id>,abcdabcdab.
+and this property goes in the workload configuration file. So now, when inserting some key-value pair, the value will be generated using the chars in this pattern. For example, if fieldsize = 10 and pattern = abcd then the row will look like 
+
+id,abcdabcdab.
   
 This was tested for cassandra binding and it works fine as long as you dont need to check for data integrity (its not implemented, but should be relatively easy to do so).
 
