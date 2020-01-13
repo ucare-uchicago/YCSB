@@ -2,6 +2,6 @@
 
 ## build cassandra binding...
 
-mvn -pl com.yahoo.ycsb:cassandra-binding -am clean package
+mvn -pl com.yahoo.ycsb:cassandra-binding -am clean package -Dcheckstyle.skip
 
 ## done

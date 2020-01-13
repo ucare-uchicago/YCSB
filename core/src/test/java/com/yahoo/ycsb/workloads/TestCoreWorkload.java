@@ -22,6 +22,7 @@ import java.util.Properties;
 
 import org.testng.annotations.Test;
 
+import com.yahoo.ycsb.FixedPatternByteIterator;
 import com.yahoo.ycsb.generator.DiscreteGenerator;
 
 public class TestCoreWorkload {
@@ -36,6 +37,11 @@ public class TestCoreWorkload {
     p.setProperty(CoreWorkload.READMODIFYWRITE_PROPORTION_PROPERTY, "0.20");
     final DiscreteGenerator generator = CoreWorkload.createOperationGenerator(p);
     final int[] counts = new int[5];
+    
+    System.out.println("@cesar: Testing core workload...");
+    
+    FixedPatternByteIterator it = new FixedPatternByteIterator("01", 10);
+    System.out.println("@cesar: " + it.toString());
     
     for (int i = 0; i < 100; ++i) {
       switch (generator.nextString()) {

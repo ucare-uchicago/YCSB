@@ -329,6 +329,11 @@ public class CoreWorkload extends Workload {
   public static final String INSERTION_RETRY_INTERVAL = "core_workload_insertion_retry_interval";
   public static final String INSERTION_RETRY_INTERVAL_DEFAULT = "3";
 
+  /**
+   * The insert pattern, for values only
+   */
+  public static final String VALUE_FIELD_PATTERN = "valuefieldpattern";
+  
   protected NumberGenerator keysequence;
   protected DiscreteGenerator operationchooser;
   protected NumberGenerator keychooser;
@@ -341,7 +346,10 @@ public class CoreWorkload extends Workload {
   protected int zeropadding;
   protected int insertionRetryLimit;
   protected int insertionRetryInterval;
-
+  protected boolean useFixedPattern;
+  protected String fixedPattern;
+  
+  
   private Measurements measurements = Measurements.getMeasurements();
 
   protected static NumberGenerator getFieldLengthGenerator(Properties p) throws WorkloadException {
@@ -499,6 +507,17 @@ public class CoreWorkload extends Workload {
         INSERTION_RETRY_LIMIT, INSERTION_RETRY_LIMIT_DEFAULT));
     insertionRetryInterval = Integer.parseInt(p.getProperty(
         INSERTION_RETRY_INTERVAL, INSERTION_RETRY_INTERVAL_DEFAULT));
+  
+    // in here, we are going to check if we should use a fixed pattern or not...
+    if(p.getProperty(VALUE_FIELD_PATTERN, null) != null) {
+    	fixedPattern = p.getProperty(VALUE_FIELD_PATTERN);
+    	useFixedPattern = true;
+    }
+    else {
+    	fixedPattern = null;
+    	useFixedPattern = false;
+    }
+  
   }
 
   protected String buildKeyName(long keynum) {
@@ -525,8 +544,14 @@ public class CoreWorkload extends Workload {
     if (dataintegrity) {
       data = new StringByteIterator(buildDeterministicValue(key, fieldkey));
     } else {
-      // fill with random data
-      data = new RandomByteIterator(fieldlengthgenerator.nextValue().longValue());
+      if(!useFixedPattern) {
+        // fill with random data
+        data = new RandomByteIterator(fieldlengthgenerator.nextValue().longValue());
+      }
+      else {
+    	// we fill we our fixed pattern...  
+    	data = new FixedPatternByteIterator(fixedPattern, fieldlengthgenerator.nextValue().intValue());  
+      }
     }
     value.put(fieldkey, data);
 
@@ -544,8 +569,14 @@ public class CoreWorkload extends Workload {
       if (dataintegrity) {
         data = new StringByteIterator(buildDeterministicValue(key, fieldkey));
       } else {
-        // fill with random data
-        data = new RandomByteIterator(fieldlengthgenerator.nextValue().longValue());
+	    if(!useFixedPattern) {
+	      // fill with random data
+	      data = new RandomByteIterator(fieldlengthgenerator.nextValue().longValue());
+	    }
+	    else {
+	      // we fill we our fixed pattern...  
+	      data = new FixedPatternByteIterator(fixedPattern, fieldlengthgenerator.nextValue().intValue());  
+	    }  
       }
       values.put(fieldkey, data);
     }

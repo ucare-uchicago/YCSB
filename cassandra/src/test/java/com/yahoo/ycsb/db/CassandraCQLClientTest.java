@@ -34,6 +34,7 @@ import com.datastax.driver.core.querybuilder.Insert;
 import com.datastax.driver.core.querybuilder.QueryBuilder;
 import com.datastax.driver.core.querybuilder.Select;
 import com.yahoo.ycsb.ByteIterator;
+import com.yahoo.ycsb.FixedPatternByteIterator;
 import com.yahoo.ycsb.Status;
 import com.yahoo.ycsb.StringByteIterator;
 import com.yahoo.ycsb.measurements.Measurements;
@@ -78,6 +79,8 @@ public class CassandraCQLClientTest {
     p.setProperty("hosts", HOST);
     p.setProperty("port", Integer.toString(PORT));
     p.setProperty("table", TABLE);
+    p.setProperty("fieldlength", Integer.toString(20));
+    p.setProperty("valuefieldpattern", "01");
 
     Measurements.setProperties(p);
     final CoreWorkload workload = new CoreWorkload();
@@ -179,7 +182,7 @@ public class CassandraCQLClientTest {
     assertThat(row.getString("field0"), is("value1"));
     assertThat(row.getString("field1"), is("value2"));
   }
-
+  
   @Test
   public void testUpdate() throws Exception {
     insertRow();
@@ -225,7 +228,7 @@ public class CassandraCQLClientTest {
     final Row row = rs.one();
     assertThat(row, nullValue());
   }
-
+  
   @Test
   public void testPreparedStatements() throws Exception {
     final int LOOP_COUNT = 3;
