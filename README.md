@@ -18,7 +18,15 @@ LICENSE file.
 
 UCARE UCHICAGO
 ====================================
-This is our for of YCSB 0.15.0. The modifications here are:
+This is our for of YCSB 0.15.0. The following bindings have been modified:
+
+1. Core
+
+This should affect all bindings. I have added a new value generator, the idea is that when inserting a key value pair, while the key generator remains unchanged, the value is generated from a pattern. The pattern is specified as:
+
+
+
+
 
 
 
