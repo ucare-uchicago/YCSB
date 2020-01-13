@@ -24,6 +24,18 @@ This is our for of YCSB 0.15.0. The following bindings have been modified:
 
 This should affect all bindings. I have added a new value generator, the idea is that when inserting a key value pair, while the key generator remains unchanged, the value is generated from a pattern. The pattern is specified as:
 
+valuefieldpattern=<some pattern>
+  
+and this property goes in the workload configuration file. So now, when inserting some key-value pair, the value will be generated using the chars in this pattern. For example, if fieldsize = 10 and pattern = abcd then the row will look like <id>,abcdabcdab.
+  
+This was tested for cassandra binding and it works fine as long as you dont need to check for data integrity (its not implemented, but should be relatively easy to do so).
+
+The changes are in the following files:
+ -- added com.yahoo.ycsb.FixedPatternByteIterator
+ -- modified com.yahoo.ycsb.workloads.CoreWorkload
+
+Look for @@cesar if you want to know which places were modified.
+
 
 
 
