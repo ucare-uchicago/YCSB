@@ -330,7 +330,7 @@ public class CoreWorkload extends Workload {
   public static final String INSERTION_RETRY_INTERVAL_DEFAULT = "3";
 
   /**
-   * The insert pattern, for values only
+   * @@cesar: The insert pattern, for values only
    */
   public static final String VALUE_FIELD_PATTERN = "valuefieldpattern";
   
@@ -508,7 +508,7 @@ public class CoreWorkload extends Workload {
     insertionRetryInterval = Integer.parseInt(p.getProperty(
         INSERTION_RETRY_INTERVAL, INSERTION_RETRY_INTERVAL_DEFAULT));
   
-    // in here, we are going to check if we should use a fixed pattern or not...
+    // @@cesar: in here, we are going to check if we should use a fixed pattern or not...
     if(p.getProperty(VALUE_FIELD_PATTERN, null) != null) {
     	fixedPattern = p.getProperty(VALUE_FIELD_PATTERN);
     	useFixedPattern = true;
@@ -549,7 +549,7 @@ public class CoreWorkload extends Workload {
         data = new RandomByteIterator(fieldlengthgenerator.nextValue().longValue());
       }
       else {
-    	// we fill we our fixed pattern...  
+    	// @@cesar: we fill we our fixed pattern...  
     	data = new FixedPatternByteIterator(fixedPattern, fieldlengthgenerator.nextValue().intValue());  
       }
     }
@@ -574,7 +574,7 @@ public class CoreWorkload extends Workload {
 	      data = new RandomByteIterator(fieldlengthgenerator.nextValue().longValue());
 	    }
 	    else {
-	      // we fill we our fixed pattern...  
+	      // @@cesar: we fill we our fixed pattern...  
 	      data = new FixedPatternByteIterator(fixedPattern, fieldlengthgenerator.nextValue().intValue());  
 	    }  
       }
