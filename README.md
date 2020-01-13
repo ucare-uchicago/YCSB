@@ -18,7 +18,7 @@ LICENSE file.
 
 UCARE UCHICAGO
 ====================================
-This is our for of YCSB 0.15.0. The following bindings have been modified:
+This is tag 0.15.0. The following bindings have been modified:
 
 1. Core
 
