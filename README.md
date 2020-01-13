@@ -18,12 +18,13 @@ LICENSE file.
 
 UCARE UCHICAGO  
 ====================================
-This is our fork of YCSB, in case we need something specific. Ideally, you should clone this repo and then do
+This is our fork of YCSB in case we need something specific. Ideally, you should clone this repo and then do
 
 git checkout tags/<tag_name> -b <branch_name>
 
 that will checkout the tag you want (the version) and setup a branch for that tag. Work on that branch and then commit/push/pull/build or do whatever you want. 
 
+To build, follow instructions in the readme file, it works like a charm.
 
 YCSB
 ====================================
