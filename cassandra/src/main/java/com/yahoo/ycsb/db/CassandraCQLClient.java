@@ -18,6 +18,9 @@
 package com.yahoo.ycsb.db;
 
 import com.datastax.driver.core.*;
+import com.datastax.driver.core.policies.DCAwareRoundRobinPolicy;
+import com.datastax.driver.core.policies.LoadBalancingPolicy;
+import com.datastax.driver.core.policies.RoundRobinPolicy;
 import com.datastax.driver.core.querybuilder.Insert;
 import com.datastax.driver.core.querybuilder.QueryBuilder;
 import com.datastax.driver.core.querybuilder.Select;
@@ -61,7 +64,25 @@ public class CassandraCQLClient extends DB {
   public static final String WRITE_CONSISTENCY_LEVEL_PROPERTY =
       "cassandra.writeconsistencylevel";
   public static final String WRITE_CONSISTENCY_LEVEL_PROPERTY_DEFAULT = "ONE";
-
+  // @cesar: I will add one more prop here
+  public static final String CLUSTER_POLICY = "cassandra.client.clusterPolicy";
+  public static final String CLUSTER_POLICY_DC_AWARE_DC_NAME = "cassandra.client.clusterPolicy.dcAware.dcName";
+  public static final String DC_CLUSTER_AWARE_POLICY = "DC_AWARE";
+  
+  public LoadBalancingPolicy getLoadBalancingPolicy() {
+	String policy = getProperties().getProperty(CLUSTER_POLICY, null);
+	if(policy == null) return new RoundRobinPolicy();
+	else if(policy.compareToIgnoreCase(DC_CLUSTER_AWARE_POLICY) == 0){
+		String dcName = getProperties().getProperty(CLUSTER_POLICY_DC_AWARE_DC_NAME, null);
+		if(dcName == null) throw new IllegalArgumentException("DC_AWARE policy but no data center name!. Use [cassandra.client.clusterPolicy.dcAware.dcName]");
+		return new DCAwareRoundRobinPolicy(dcName);
+	}
+	else {
+		return new RoundRobinPolicy();
+	}
+	  
+  }
+  
   /**
    * Count the number of times initialized to teardown on the last
    * {@link #cleanup()}.
@@ -124,9 +145,11 @@ public class CassandraCQLClient extends DB {
         // public void connect(String node) {}
         if ((username != null) && !username.isEmpty()) {
           cluster = Cluster.builder().withCredentials(username, password)
+        		  .withLoadBalancingPolicy(getLoadBalancingPolicy())
               .withPort(Integer.valueOf(port)).addContactPoints(hosts).build();
         } else {
           cluster = Cluster.builder().withPort(Integer.valueOf(port))
+        		  .withLoadBalancingPolicy(getLoadBalancingPolicy())
               .addContactPoints(hosts).build();
         }
 
